@@ -1,0 +1,88 @@
+#include <stdio.h>
+
+#define MAX_CARTAS 100
+
+typedef struct {
+    char estado[50];
+    int codigo;
+    char nome[100];
+    int populacao;
+    float pib;
+    float area;
+    int pontosTuristicos;
+    float densidadePopulacional;
+    float pibPerCapita;
+} CartaCidade;
+
+float calcularDensidade(int populacao, float area) {
+    return populacao / area;
+}
+
+float calcularPIBPerCapita(float pib, int populacao) {
+    return pib / populacao;
+}
+
+void cadastrarCarta(CartaCidade *carta) {
+    printf("\n--- Cadastro de Carta ---\n");
+    printf("Digite o estado: ");
+    scanf(" %[^\n]", carta->estado);
+
+    printf("Digite o código da cidade: ");
+    scanf("%d", &carta->codigo);
+
+    printf("Digite o nome da cidade: ");
+    scanf(" %[^\n]", carta->nome);
+
+    printf("Digite a população: ");
+    scanf("%d", &carta->populacao);
+
+    printf("Digite o PIB (em milhões): ");
+    scanf("%f", &carta->pib);
+
+    printf("Digite a área (em km²): ");
+    scanf("%f", &carta->area);
+
+    printf("Digite o número de pontos turísticos: ");
+    scanf("%d", &carta->pontosTuristicos);
+
+    carta->densidadePopulacional = calcularDensidade(carta->populacao, carta->area);
+    carta->pibPerCapita = calcularPIBPerCapita(carta->pib * 1000000, carta->populacao);
+}
+
+void exibirCarta(CartaCidade carta) {
+    printf("\n--- Carta da Cidade ---\n");
+    printf("Estado: %s\n", carta.estado);
+    printf("Código: %d\n", carta.codigo);
+    printf("Cidade: %s\n", carta.nome);
+    printf("População: %d\n", carta.populacao);
+    printf("PIB: R$ %.2f milhões\n", carta.pib);
+    printf("Área: %.2f km²\n", carta.area);
+    printf("Pontos Turísticos: %d\n", carta.pontosTuristicos);
+    printf("Densidade Populacional: %.2f hab/km²\n", carta.densidadePopulacional);
+    printf("PIB per Capita: R$ %.2f\n", carta.pibPerCapita);
+}
+
+int main() {
+    CartaCidade cartas[MAX_CARTAS];
+    int quantidade, i;
+
+    printf("Quantas cartas deseja cadastrar? ");
+    scanf("%d", &quantidade);
+
+    if (quantidade > MAX_CARTAS) {
+        printf("Número máximo de cartas excedido. Permitido até %d.\n", MAX_CARTAS);
+        return 1;
+    }
+
+    for (i = 0; i < quantidade; i++) {
+        printf("\n--- Carta %d ---\n", i + 1);
+        cadastrarCarta(&cartas[i]);
+    }
+
+    printf("\nExibindo todas as cartas cadastradas:\n");
+    for (i = 0; i < quantidade; i++) {
+        exibirCarta(cartas[i]);
+    }
+
+    return 0;
+}
